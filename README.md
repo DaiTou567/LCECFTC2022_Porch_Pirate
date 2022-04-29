@@ -1,6 +1,6 @@
 Our teams robot for FTC 2021-22; All source files and design files used in the robot are located here. 
 
-This is completely free to use, and if you forget attribution, no worries, it's the learning that counts!
+This is completely free to use, and if you forget attribution, no worries, it's the learning that counts! However, while we won't enforce attribution, it is mandatory that any shared copies or derivatives of this work carry the attached GPLv3 license, and are properly open source.
 
 Team members direct work being showcased here (Selections of this repository are hosted on their pages): 
 https://github.com/SanjiCharmeleon

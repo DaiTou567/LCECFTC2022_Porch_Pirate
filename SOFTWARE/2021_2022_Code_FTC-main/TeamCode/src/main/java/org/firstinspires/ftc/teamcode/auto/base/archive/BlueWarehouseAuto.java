@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 @Autonomous(name="Blue Warehouse Auto", group="Routes")
 
 @Disabled
-public class BlueWarehouseAuto extends LinearOpMode {
+public class  BlueWarehouseAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     OpenCvCamera phoneCam;

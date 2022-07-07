@@ -65,12 +65,20 @@ import com.qualcomm.robotcore.util.Range;
 public class HardwareDrive
 {
     //Motors
-    public DcMotorEx  leftBot   = null;
-    public DcMotorEx  leftTop   = null;
-    public DcMotorEx  rightBot   = null;
-    public DcMotorEx  rightTop   = null;
+    public DcMotorEx  lf   = null;
+    public DcMotorEx  rf   = null;
+    public DcMotorEx  lb   = null;
+    public DcMotorEx  rb   = null;
+
+    public DcMotorEx duckWheel = null;
+    public DcMotorEx lifter = null;
 
     //Servos
+    public Servo cap = null;
+    public CRServo spin = null;
+
+    public DcMotorEx testSpin = null;
+    public CRServo succ = null;
 
     //Sensor
     public DigitalChannel digitalTouch;
@@ -98,10 +106,46 @@ public class HardwareDrive
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        leftBot  = hwMap.get(DcMotorEx.class, "left_bottom");
-        leftTop  = hwMap.get(DcMotorEx.class, "left_top");
-        rightBot  = hwMap.get(DcMotorEx.class, "right_bottom");
-        rightTop  = hwMap.get(DcMotorEx.class, "right_top");
+        lf  = hwMap.get(DcMotorEx.class, "left_front");
+        rf  = hwMap.get(DcMotorEx.class, "right_front");
+        lb  = hwMap.get(DcMotorEx.class, "left_back");
+        rb  = hwMap.get(DcMotorEx.class, "right_back");
+
+        duckWheel = hwMap.get(DcMotorEx.class, "carousel");
+        lifter = hwMap.get(DcMotorEx.class, "lifter");
+        colorSensor = hwMap.get(NormalizedColorSensor.class, "color");
+        colorFloorSensor = hwMap.get(NormalizedColorSensor.class, "floor_color");
+        colorFloorSensor2 = hwMap.get(NormalizedColorSensor.class, "floor_color2");
+
+
+        if (colorSensor instanceof SwitchableLight)
+            ((SwitchableLight)colorSensor).enableLight(true);
+
+        if (colorFloorSensor instanceof SwitchableLight)
+            ((SwitchableLight)colorFloorSensor).enableLight(true);
+
+        if (colorFloorSensor2 instanceof SwitchableLight)
+            ((SwitchableLight)colorFloorSensor2).enableLight(true);
+
+
+        //Pyll String Test Opmode
+        testSpin = hwMap.get(DcMotorEx.class, "string");
+        succ = hwMap.get(CRServo.class,"string");
+        succ.setPower(0);
+
+
+        //Digital Touch Sensor
+        digitalTouch = hwMap.get(DigitalChannel.class, "digital_touch");
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+
+
+
+
+
+
+        //Define and Initialize Servos
+        cap  = hwMap.get(Servo.class, "cap");
+        spin = hwMap.get(CRServo.class,"spin");
 
       //  cap.setPosition(constants.capStart);
         spin.setPower(0);
@@ -121,16 +165,23 @@ public class HardwareDrive
 
 
         //Reverse Motor
-        leftBot.setDirection(DcMotorEx.Direction.FORWARD);
-        leftTop.setDirection(DcMotorEx.Direction.FORWARD);
-        rightBot.setDirection(DcMotorEx.Direction.FORWARD);
-        rightTop.setDirection(DcMotorEx.Direction.FORWARD);
+        lf.setDirection(DcMotorEx.Direction.REVERSE);
+        lb.setDirection(DcMotorEx.Direction.REVERSE);
+        rf.setDirection(DcMotorEx.Direction.FORWARD);
+        rb.setDirection(DcMotorEx.Direction.FORWARD);
+
+        duckWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        lifter.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Set all motors to zero power
-        leftBot.setPower(0);
-        leftTop.setPower(0);
-        rightBot.setPower(0);
-        rightTop.setPower(0);
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
+
+        duckWheel.setPower(0);
+        lifter.setPower(0);
+        testSpin.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -138,6 +189,9 @@ public class HardwareDrive
         lb.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         rf.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         rb.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        duckWheel.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        lifter.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
 

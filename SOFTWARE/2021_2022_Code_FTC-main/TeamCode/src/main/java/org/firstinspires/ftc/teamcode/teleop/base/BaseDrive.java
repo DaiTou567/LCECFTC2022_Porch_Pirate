@@ -101,7 +101,18 @@ public class BaseDrive extends OpMode{
     }
 
     void UpdateButton(){
+        capDropButton.update(gamepad1.b);
+        capIntakeButton.update(gamepad1.a);
+        capUpButton.update(gamepad1.y);
+        setCapMode.update(gamepad1.x);
 
+
+        carouselButton.update(gamepad2.a);
+        carouselButtonInverted.update(gamepad2.b);
+        lifterButton.update(gamepad2.y);
+        lifterBottomButton.update(gamepad2.x);
+        spinInFullButton.update(gamepad2.dpad_down);
+        spinOutFullButton.update(gamepad2.dpad_up);
     }
 
     /*
@@ -119,18 +130,72 @@ public class BaseDrive extends OpMode{
 
      */
 
-    void DriveTrainBase(){
+    void DriveTrainBase(double drivePower){
+        double directionX = Math.pow(gamepad1.left_stick_x, 1); //Strafe
+        double directionY = -Math.pow(gamepad1.left_stick_y, 1); //Forward
+        double directionR = Math.pow(gamepad1.right_stick_x, 1); //Turn
+
+
+        robot.lf.setPower((directionY + directionR + directionX) * drivePower);
+        robot.rf.setPower((directionY - directionR - directionX) * drivePower);
+        robot.lb.setPower((directionY + directionR - directionX) * drivePower);
+        robot.rb.setPower((directionY - directionR + directionX) * drivePower);
+
     }
 
-    private void DriveTrainMove(){
-        double x = gamepad1.left_stick_x;
-        double y = gamepad1.left_stick_y;
-        double distance = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-        double angle = Math.atan2(y, x);
+    void DriveMicroAdjust(double power){
+        if (gamepad1.dpad_up){
+            robot.lf.setPower(power);
+            robot.rf.setPower(power);
+            robot.lb.setPower(power);
+            robot.rb.setPower(power);
+        }
+        else if (gamepad1.dpad_down){
+            robot.lf.setPower(-power);
+            robot.rf.setPower(-power);
+            robot.lb.setPower(-power);
+            robot.rb.setPower(-power);
+        }
+        else if (gamepad1.dpad_right){
+            robot.lf.setPower(power);
+            robot.rf.setPower(-power);
+            robot.lb.setPower(-power);
+            robot.rb.setPower(power);
+        }
+        else if (gamepad1.dpad_left){
+            robot.lf.setPower(-power);
+            robot.rf.setPower(power);
+            robot.lb.setPower(power);
+            robot.rb.setPower(-power);
+        }
 
+        if (gamepad1.left_trigger == 1){
+            robot.lf.setPower(-power);
+            robot.rf.setPower(power);
+            robot.lb.setPower(-power);
+            robot.rb.setPower(power);
+        }
+        else if (gamepad1.right_trigger == 1){
+            robot.lf.setPower(power);
+            robot.rf.setPower(-power);
+            robot.lb.setPower(power);
+            robot.rb.setPower(-power);
+        }
     }
 
+    double DriveTrainSpeed(){
+        double drivePower = 0.75;
 
+
+
+        if (gamepad1.right_bumper)
+            drivePower = 1;
+        else if (gamepad1.left_bumper)
+            drivePower = 0.25;
+
+
+        return drivePower;
+    }
 
     void Lifter() {
         int position = robot.lifter.getCurrentPosition();
